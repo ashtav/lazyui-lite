@@ -9,7 +9,6 @@ environment:
 
 dependencies:
   cached_network_image: ^3.4.1
-  custom_refresh_indicator: ^4.0.1
   flutter:
     sdk: flutter
   flutter_svg: ^2.0.16
