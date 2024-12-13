@@ -122,7 +122,8 @@ extension LzListMapExtension on List<Map> {
       }
 
       return result;
-    } catch (e) {
+    } catch (e, s) {
+      Utils.errorCatcher(e, s, tracing: true);
       return [];
       // throw Exception('$e, $s');
     }

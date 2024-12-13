@@ -168,6 +168,13 @@ class LzModifiers {
   }
 
   /// ``` dart
+  /// ListView().lz.onRefresh(() async => print('refreshed'));
+  /// ```
+  Refreshtor onRefresh(Future<void> Function() onRefresh) {
+    return Refreshtor(onRefresh: onRefresh, child: widget);
+  }
+
+  /// ``` dart
   /// Widget().lz.skeleton(true);
   /// ```
   Widget skeleton(bool value, [Widget? skeleton]) {

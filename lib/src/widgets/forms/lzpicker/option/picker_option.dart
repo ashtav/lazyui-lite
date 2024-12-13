@@ -460,8 +460,8 @@ class SelectPickerNotifier extends ChangeNotifier {
       scroll.animateToItem(index, duration: 250.ms, curve: Curves.easeInOut);
 
       notifyListeners();
-    } catch (e) {
-      // error
+    } catch (e, s) {
+      Utils.errorCatcher(e, s);
     }
   }
 }

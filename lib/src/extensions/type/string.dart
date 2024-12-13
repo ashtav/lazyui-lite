@@ -170,7 +170,11 @@ extension LzNullableStringExtension on String? {
       // Clean only the integer part of non-numeric characters
       num = num.replaceAll(RegExp(r'[^0-9]'), '');
 
-      String result = '';
+      String result = NumberFormat.currency(
+        locale: 'id_ID',
+        decimalDigits: 0, // Only format the integer part to avoid rounding
+        symbol: prefix,
+      ).format(int.parse(num));
 
       result =
           result.replaceAll('.', separator); // Use the separator for thousands
@@ -266,7 +270,8 @@ extension LzNullableStringExtension on String? {
       }
 
       return DateTime.now();
-    } catch (e) {
+    } catch (e, s) {
+      Utils.errorCatcher(e, s);
       return DateTime.now();
     }
   }

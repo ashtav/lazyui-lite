@@ -104,9 +104,13 @@ extension MapStringExtension on Map<String, dynamic> {
           return MapEntry(key, value);
         }
 
-        
+        String result = NumberFormat.currency(
+          locale: 'id_ID',
+          decimalDigits: 0,
+          symbol: prefix,
+        ).format(int.parse(value.toString()));
 
-        return MapEntry(key, 'result'.replaceAll('.', separator));
+        return MapEntry(key, result.replaceAll('.', separator));
       } else {
         return MapEntry(key, value);
       }

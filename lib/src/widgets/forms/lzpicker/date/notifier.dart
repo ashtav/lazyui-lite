@@ -146,8 +146,8 @@ class DatePickerNotifier extends ChangeNotifier {
       }
 
       onChangeForWidget?.call(dateTime);
-    } catch (e) {
-      // error
+    } catch (e, s) {
+      Utils.errorCatcher(e, s);
     }
   }
 

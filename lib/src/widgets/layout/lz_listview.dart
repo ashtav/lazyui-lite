@@ -53,6 +53,9 @@ class LzListView extends StatefulWidget {
   /// Type of refresh indicator to be displayed.
   final RefrehtorType refreshType;
 
+  /// Style of refresh indicator to be displayed.
+  final RefreshtorStyle? refreshStyle;
+
   /// Gap between items in the list.
   final double? gap;
 
@@ -70,6 +73,7 @@ class LzListView extends StatefulWidget {
       this.reverse = false,
       this.onRefresh,
       this.refreshType = RefrehtorType.bar,
+      this.refreshStyle,
       this.gap});
 
   @override
@@ -173,7 +177,11 @@ class _LzListViewState extends State<LzListView> {
 
     Widget content({double? cacheExtent}) => widget.onRefresh == null
         ? listView(cacheExtent)
-        : listView(cacheExtent);
+        : Refreshtor(
+            onRefresh: () async => widget.onRefresh?.call(),
+            type: widget.refreshType,
+            style: widget.refreshStyle,
+            child: listView(cacheExtent));
 
     return widget.autoCache
         ? StreamBuilder<double>(

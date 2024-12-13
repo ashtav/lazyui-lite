@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:lazyui_lite/src/constants/enum.dart';
 import 'package:lazyui_lite/src/widgets/feedback/lztoast/src/loading.dart';
 
@@ -45,6 +46,11 @@ class LazyUi {
       String? locale}) {
     WidgetsFlutterBinding.ensureInitialized();
 
+    // Initialize locale for date formatting if provided
+    if (locale != null) {
+      initializeDateFormatting(locale);
+    }
+
     // Lock device orientation to portrait if alwaysPortrait is true
     if (alwaysPortrait) {
       Utils.orientation(
@@ -52,6 +58,7 @@ class LazyUi {
     }
 
     // Set default values for font, icon, space, and radius if they are not provided
+    _defaultTextStyle = font ?? TextStyle(fontSize: 15.5);
     _defaultIconType = icon ?? IconType.tabler;
     _defaultRadius = radius ?? _defaultRadius;
 

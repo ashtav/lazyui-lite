@@ -29,6 +29,53 @@ class Utils {
     return Color(int.tryParse('0xff$color') ?? 0xff000000);
   }
 
+  /// Catcher function for handling errors and exceptions.
+  ///
+  /// The [e] parameter represents the error or exception.
+  /// The [s] parameter represents the stack trace associated with the error or exception.
+  /// The [tracing] parameter, if set to true, enables detailed tracing of error locations (default: false).
+  ///
+  /// Example usage:
+  /// ```dart
+  /// try {
+  ///   // Code that may throw an error or exception
+  /// } catch (e, s) {
+  ///   Utils.errorCatcher(e, s, tracing: true);
+  /// }
+  /// ```
+
+  static errorCatcher(e, StackTrace s, {bool tracing = false}) {
+    if (tracing) {
+      final frames = Trace.from(s).terse.frames;
+
+      // Extracting relevant information from stack frames
+      List<String> members = frames
+          .take(5)
+          .map((e) => '${e.member ?? 'Unknown'} (${e.line}:${e.column})')
+          .toList();
+      String member = members.join(', ');
+
+      // Constructing the error message with trace information
+      String message = '''$e
+Try to check [$member]''';
+
+      // Logging the error message
+      logg(message, name: 'ERROR');
+      return;
+    }
+
+    // Extracting relevant frames for error location
+    List frames = Trace.current().frames,
+        terseFrames = Trace.from(s).terse.frames;
+    Frame frame = Trace.current().frames[frames.length > 1 ? 1 : 0],
+        trace = Trace.from(s).terse.frames[terseFrames.length > 1 ? 1 : 0];
+
+    String errorLocation = '${frame.member}', errorLine = '${trace.line}';
+
+    // Logging the error message with error location
+    logg('-- Error on $errorLocation (Line $errorLine), $e', name: 'ERROR');
+  }
+
   /// Set the system UI overlay style with the specified options.
   ///
   /// The [brightness] parameter sets the brightness of the status bar icons (default: Brightness.dark).
@@ -219,6 +266,113 @@ class Utils {
     SystemChrome.setPreferredOrientations(orientations);
   }
 
+  /// Convert a [File] to a base64-encoded string.
+  ///
+  /// The [file] parameter is the file to be converted.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// File imageFile = File('path/to/image.png');
+  /// String base64 = await fileToBase64(imageFile);
+  /// print(base64); // The base64-encoded string representation of the image file
+  /// ```
+  static Future fileToBase64(File file) async {
+    String base64Image = base64Encode(file.readAsBytesSync());
+    return base64Image;
+  }
+
+  /// Convert a [Uint8List] to a [File] and save it to the temporary directory.
+  ///
+  /// The [value] parameter is the Uint8List data to be converted.
+  /// The optional [filename] parameter is the name of the file (default: current timestamp).
+  ///
+  /// Example usage:
+  /// ```dart
+  /// Uint8List imageData = ... // Get the Uint8List data
+  /// File imageFile = await uint8ListToFile(imageData, filename: 'image.png');
+  /// print(imageFile.path); // The path to the saved image file
+  /// ```
+  static Future uint8ListToFile(Uint8List value, {String? filename}) async {
+    final Directory tempDir = await getTemporaryDirectory();
+    File file = await File(
+            '${tempDir.path}/${filename ?? DateTime.now().millisecondsSinceEpoch.toString()}.png')
+        .create();
+    file.writeAsBytesSync(value);
+
+    return file;
+  }
+
+  /// Convert a base64-encoded string to a [File] and save it to the application documents directory.
+  ///
+  /// The [base64] parameter is the base64-encoded string to be converted.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// String base64Image = ... // Get the base64-encoded string
+  /// File imageFile = await base64ToFile(base64Image);
+  /// print(imageFile.path); // The path to the saved image file
+  /// ```
+  static Future<File> base64ToFile(String base64) async {
+    Uint8List uint8list = base64Decode(base64);
+    String dir = (await getApplicationDocumentsDirectory()).path;
+    File file = File("$dir/${DateTime.now().millisecondsSinceEpoch}.png");
+    return await file.writeAsBytes(uint8list);
+  }
+
+  /// Convert a base64-encoded string to an [Image] widget.
+  ///
+  /// The [base64] parameter is the base64-encoded string to be converted.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// String base64Image = ... // Get the base64-encoded string
+  /// Image image = await base64ToImage(base64Image);
+  /// ```
+  static Future<Image> base64ToImage(String base64) async {
+    Uint8List uint8list = base64Decode(base64);
+    return Image.memory(uint8list);
+  }
+
+  /// Download an image from the given [url] and save it as a [File].
+  ///
+  /// The [url] parameter is the URL of the image to be downloaded.
+  /// The optional [format] parameter sets the file format (default: 'png').
+  ///
+  /// Example usage:
+  /// ```dart
+  /// String imageUrl = ... // The URL of the image
+  /// File imageFile = await urlToFile(imageUrl, format: 'jpg');
+  /// print(imageFile.path); // The path to the downloaded image file
+  /// ```
+  static Future<File> urlToFile(String url, {String format = 'png'}) async {
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    File file =
+        File('$tempPath${DateTime.now().millisecondsSinceEpoch}.$format');
+    http.Response response = await http.get(Uri.parse(url));
+    await file.writeAsBytes(response.bodyBytes);
+    return file;
+  }
+
+  /// Convert an image file located at the specified [path] in the assets folder to a [File].
+  ///
+  /// The [path] parameter is the relative path of the image file in the assets folder.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// String imagePath = 'images/my_image.png'; // The relative path of the image file
+  /// File imageFile = await imageToFile(imagePath);
+  /// print(imageFile.path); // The path to the converted image file
+  /// ```
+  static Future<File> imageToFile(String path) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    ByteData bytes = await rootBundle.load('assets/$path');
+    String tempPath = (await getTemporaryDirectory()).path;
+    File file = File('$tempPath/$fileName.png');
+    return await file.writeAsBytes(
+        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+  }
+
   /// Convert an HTML string to plain text.
   ///
   /// The [html] parameter is the HTML string to be converted.
@@ -364,8 +518,8 @@ class Utils {
       }).catchError((err) {
         logg(err);
       });
-    } catch (e) {
-      return false;
+    } catch (e, s) {
+      Utils.errorCatcher(e, s);
     }
 
     return isOk;
@@ -416,6 +570,56 @@ class Utils {
           duration: const Duration(milliseconds: 250),
           curve: Curves.ease);
     }
+  }
+
+  /// Fetches various pieces of information about the device.
+  ///
+  /// This function utilizes the `DeviceInfoPlugin` to gather device-specific
+  /// information for either Android or iOS devices. The information collected
+  /// includes the brand, model, system version, SDK version, and a unique identifier.
+  ///
+  /// Returns a [Device] object that holds the gathered information.
+  ///
+  /// Example usage:
+  /// ```dart
+  /// Device deviceInfo = await getDevice();
+  /// print("Brand: ${deviceInfo.brand}");
+  /// print("Model: ${deviceInfo.model}");
+  /// print("System Version: ${deviceInfo.system}");
+  /// print("SDK Version: ${deviceInfo.sdk}");
+  /// print("Unique ID: ${deviceInfo.id}");
+  /// ```
+  ///
+  /// This function requires the `DeviceInfoPlugin`, which needs to be imported and initialized.
+  ///
+  /// The unique identifier is platform-dependent:
+  /// - On Android, it uses the `id` field from `AndroidDeviceInfo`.
+  /// - On iOS, it uses the `identifierForVendor` field from `IosDeviceInfo`.
+  ///
+  /// Note: On iOS, the `identifierForVendor` will change if all apps from the same vendor are uninstalled.
+  static Future<Device> getDevice() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    String? brand, model, system, sdk, id;
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+
+      brand = androidInfo.brand.ucwords;
+      model = androidInfo.model;
+      system = androidInfo.version.release;
+      sdk = androidInfo.version.sdkInt.toString();
+      id = androidInfo.id;
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+
+      brand = iosInfo.name;
+      model = iosInfo.model;
+      system = iosInfo.systemName;
+      sdk = iosInfo.systemVersion;
+      id = iosInfo.identifierForVendor;
+    }
+
+    return Device(brand: brand, model: model, system: system, sdk: sdk, id: id);
   }
 
   /// Generate a random number within the specified range.

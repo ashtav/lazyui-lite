@@ -364,7 +364,7 @@ class TimePicker extends StatelessWidget {
             radius: Br.radius(radius),
             child: notifier.watch(
               (state) {
-                String time = '';
+                String time = state.value.format('HH:mm');
 
                 return AnimatedContainer(
                   duration: 350.ms,

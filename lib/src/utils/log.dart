@@ -67,3 +67,21 @@ void logg(dynamic value,
   // Print the log message on the debug console
   log(logMessage, name: name ?? 'LOG');
 }
+
+/// Prints a list of log messages with optional color, length limit, and name.
+///
+/// The [values] is a list of messages to be logged.
+/// The [color] parameter sets the color of the log messages (default: yellow).
+/// The [limit] parameter specifies the maximum length of each log message (default: 500).
+/// The [name] parameter is an optional name to be displayed along with the log messages.
+///
+/// Example usage:
+/// ```dart
+/// logs(['message1', 'message2', 'message3'], color: LogColor.red, limit: 1000);
+/// ```
+void logs(List values,
+    {LogColor color = LogColor.yellow, int limit = 500, String? name}) {
+  for (var value in values) {
+    logg(value, color: color, limit: limit, name: name);
+  }
+}

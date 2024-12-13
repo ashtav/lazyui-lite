@@ -151,8 +151,8 @@ class DatePickerNotifier extends ChangeNotifier {
       Utils.timer(() {
         isFromSelectDate = false;
       }, 200.ms);
-    } catch (e) {
-      // error
+    } catch (e, s) {
+      Utils.errorCatcher(e, s);
     }
   }
 
@@ -217,8 +217,8 @@ class DatePickerNotifier extends ChangeNotifier {
         scrollTo('m', initDate[0].month - 1);
         scrollTo('y', initDate[0].year - minDate.year);
       }
-    } catch (e) {
-      // error
+    } catch (e, s) {
+      Utils.errorCatcher(e, s);
     }
   }
 

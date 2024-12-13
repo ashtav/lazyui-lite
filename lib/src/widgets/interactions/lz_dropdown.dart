@@ -423,7 +423,8 @@ class _Overlay extends StatelessWidget {
       }
 
       return null;
-    } catch (e) {
+    } catch (e, s) {
+      Errors.check(e, s);
       return null;
     }
   }

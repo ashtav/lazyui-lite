@@ -327,7 +327,7 @@ class TimePicker extends StatelessWidget {
             radius: Br.radius(radius),
             child: notifier.watch(
               (state) {
-                String time = '';
+                String time = state.value.format('HH:mm');
 
                 return AnimatedContainer(
                   duration: 350.ms,
@@ -425,8 +425,8 @@ class StartEndDate extends StatelessWidget {
           ),
           child: notifier.watch(
             (state) {
-              String start = '';
-              String end = '';
+              String start = state.initDate[0].format(format ?? 'yyyy-MM-dd');
+              String end = state.initDate[1].format(format ?? 'yyyy-MM-dd');
 
               return IntrinsicHeight(
                 child: Row(
