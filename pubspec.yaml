@@ -1,0 +1,42 @@
+name: lazyui_lite
+description: "A new Flutter package project."
+version: 0.0.1
+homepage: null
+
+environment:
+  sdk: ^3.6.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  cached_network_image: ^3.4.1
+  custom_refresh_indicator: ^4.0.1
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.16
+  google_fonts: ^6.2.1
+  http: ^1.2.2
+  intl: ^0.20.1
+  stack_trace: ^1.12.0
+
+dev_dependencies:
+  flutter_lints: ^5.0.0
+  flutter_test:
+    sdk: flutter
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+# The following section is specific to Flutter packages.
+flutter:
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: LineAwesomeIcons
+      fonts:
+        - asset: assets/fonts/line-awesome.ttf
+    - family: TablerIcons
+      fonts:
+        - asset: assets/fonts/tabler-icons.ttf
+    - family: HgiStrokeRounded
+      fonts:
+        - asset: assets/fonts/hgi-stroke-rounded.ttf
