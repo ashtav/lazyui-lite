@@ -11,7 +11,6 @@ import '../constants/string.dart';
 
 export '../theme/theme.dart';
 export 'components/lzbutton/lzbutton.dart';
-export 'components/lzimage/lzimage.dart';
 export 'dialogs/lzconfirm/lzconfirm.dart';
 export 'feedback/lztoast/lztoast.dart';
 export 'forms/lzform/lzform.dart';
