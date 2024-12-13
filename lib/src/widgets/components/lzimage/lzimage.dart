@@ -120,15 +120,12 @@ class LzImage<T> extends StatelessWidget {
               alignment: alignment,
               placeholderBuilder: (context) => placeholder);
         } else {
-          imageWidget = CachedNetworkImage(
-            imageUrl: image,
+          imageWidget = Image.network(
+            image,
             fit: fit,
             width: width,
             height: height,
             alignment: alignment,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                placeholder,
-            errorWidget: (context, url, error) => errorWidget,
           );
         }
       }

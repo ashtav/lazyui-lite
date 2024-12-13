@@ -8,7 +8,6 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
-  cached_network_image: ^3.4.1
   custom_refresh_indicator: ^4.0.1
   device_info_plus: ^11.2.0
   flutter:
@@ -16,7 +15,6 @@ dependencies:
   flutter_svg: ^2.0.16
   http: ^1.2.2
   intl: ^0.20.1
-  path_provider: ^2.1.4
   stack_trace: ^1.11.1
   teledart: ^0.6.1
   tutorial_coach_mark: ^1.2.11

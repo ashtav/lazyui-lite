@@ -281,43 +281,6 @@ Try to check [$member]''';
     return base64Image;
   }
 
-  /// Convert a [Uint8List] to a [File] and save it to the temporary directory.
-  ///
-  /// The [value] parameter is the Uint8List data to be converted.
-  /// The optional [filename] parameter is the name of the file (default: current timestamp).
-  ///
-  /// Example usage:
-  /// ```dart
-  /// Uint8List imageData = ... // Get the Uint8List data
-  /// File imageFile = await uint8ListToFile(imageData, filename: 'image.png');
-  /// print(imageFile.path); // The path to the saved image file
-  /// ```
-  static Future uint8ListToFile(Uint8List value, {String? filename}) async {
-    final Directory tempDir = await getTemporaryDirectory();
-    File file = await File(
-            '${tempDir.path}/${filename ?? DateTime.now().millisecondsSinceEpoch.toString()}.png')
-        .create();
-    file.writeAsBytesSync(value);
-
-    return file;
-  }
-
-  /// Convert a base64-encoded string to a [File] and save it to the application documents directory.
-  ///
-  /// The [base64] parameter is the base64-encoded string to be converted.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// String base64Image = ... // Get the base64-encoded string
-  /// File imageFile = await base64ToFile(base64Image);
-  /// print(imageFile.path); // The path to the saved image file
-  /// ```
-  static Future<File> base64ToFile(String base64) async {
-    Uint8List uint8list = base64Decode(base64);
-    String dir = (await getApplicationDocumentsDirectory()).path;
-    File file = File("$dir/${DateTime.now().millisecondsSinceEpoch}.png");
-    return await file.writeAsBytes(uint8list);
-  }
 
   /// Convert a base64-encoded string to an [Image] widget.
   ///
@@ -331,46 +294,6 @@ Try to check [$member]''';
   static Future<Image> base64ToImage(String base64) async {
     Uint8List uint8list = base64Decode(base64);
     return Image.memory(uint8list);
-  }
-
-  /// Download an image from the given [url] and save it as a [File].
-  ///
-  /// The [url] parameter is the URL of the image to be downloaded.
-  /// The optional [format] parameter sets the file format (default: 'png').
-  ///
-  /// Example usage:
-  /// ```dart
-  /// String imageUrl = ... // The URL of the image
-  /// File imageFile = await urlToFile(imageUrl, format: 'jpg');
-  /// print(imageFile.path); // The path to the downloaded image file
-  /// ```
-  static Future<File> urlToFile(String url, {String format = 'png'}) async {
-    Directory tempDir = await getTemporaryDirectory();
-    String tempPath = tempDir.path;
-    File file =
-        File('$tempPath${DateTime.now().millisecondsSinceEpoch}.$format');
-    http.Response response = await http.get(Uri.parse(url));
-    await file.writeAsBytes(response.bodyBytes);
-    return file;
-  }
-
-  /// Convert an image file located at the specified [path] in the assets folder to a [File].
-  ///
-  /// The [path] parameter is the relative path of the image file in the assets folder.
-  ///
-  /// Example usage:
-  /// ```dart
-  /// String imagePath = 'images/my_image.png'; // The relative path of the image file
-  /// File imageFile = await imageToFile(imagePath);
-  /// print(imageFile.path); // The path to the converted image file
-  /// ```
-  static Future<File> imageToFile(String path) async {
-    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    ByteData bytes = await rootBundle.load('assets/$path');
-    String tempPath = (await getTemporaryDirectory()).path;
-    File file = File('$tempPath/$fileName.png');
-    return await file.writeAsBytes(
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
   }
 
   /// Convert an HTML string to plain text.
