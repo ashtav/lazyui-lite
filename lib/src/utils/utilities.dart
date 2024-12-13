@@ -29,53 +29,6 @@ class Utils {
     return Color(int.tryParse('0xff$color') ?? 0xff000000);
   }
 
-  /// Catcher function for handling errors and exceptions.
-  ///
-  /// The [e] parameter represents the error or exception.
-  /// The [s] parameter represents the stack trace associated with the error or exception.
-  /// The [tracing] parameter, if set to true, enables detailed tracing of error locations (default: false).
-  ///
-  /// Example usage:
-  /// ```dart
-  /// try {
-  ///   // Code that may throw an error or exception
-  /// } catch (e, s) {
-  ///   Utils.errorCatcher(e, s, tracing: true);
-  /// }
-  /// ```
-
-  static errorCatcher(e, StackTrace s, {bool tracing = false}) {
-    if (tracing) {
-      final frames = Trace.from(s).terse.frames;
-
-      // Extracting relevant information from stack frames
-      List<String> members = frames
-          .take(5)
-          .map((e) => '${e.member ?? 'Unknown'} (${e.line}:${e.column})')
-          .toList();
-      String member = members.join(', ');
-
-      // Constructing the error message with trace information
-      String message = '''$e
-Try to check [$member]''';
-
-      // Logging the error message
-      logg(message, name: 'ERROR');
-      return;
-    }
-
-    // Extracting relevant frames for error location
-    List frames = Trace.current().frames,
-        terseFrames = Trace.from(s).terse.frames;
-    Frame frame = Trace.current().frames[frames.length > 1 ? 1 : 0],
-        trace = Trace.from(s).terse.frames[terseFrames.length > 1 ? 1 : 0];
-
-    String errorLocation = '${frame.member}', errorLine = '${trace.line}';
-
-    // Logging the error message with error location
-    logg('-- Error on $errorLocation (Line $errorLine), $e', name: 'ERROR');
-  }
-
   /// Set the system UI overlay style with the specified options.
   ///
   /// The [brightness] parameter sets the brightness of the status bar icons (default: Brightness.dark).
@@ -411,8 +364,8 @@ Try to check [$member]''';
       }).catchError((err) {
         logg(err);
       });
-    } catch (e, s) {
-      Utils.errorCatcher(e, s);
+    } catch (e) {
+      return false;
     }
 
     return isOk;

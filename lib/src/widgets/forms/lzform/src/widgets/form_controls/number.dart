@@ -149,9 +149,9 @@ class Number extends StatelessWidget with LzFormMixin {
 
         notifier.controller.text = number.toString();
         onChange?.call(number.toString());
-      } catch (e, s) {
-        Utils.errorCatcher(e, s);
-      }
+      } catch (e) {
+      // error
+    }
     }
 
     // ink touch & input field

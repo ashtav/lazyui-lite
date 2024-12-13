@@ -85,8 +85,8 @@ class TimePickerNotifier extends ChangeNotifier {
           scrollTo('i', minTime.minute);
         }
       }
-    } catch (e, s) {
-      Utils.errorCatcher(e, s);
+    } catch (e) {
+      // error
     }
   }
 

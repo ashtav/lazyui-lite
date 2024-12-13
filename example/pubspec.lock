@@ -198,9 +198,11 @@ packages:
   lazyui_lite:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: b27ef03981963c039565cf12d68ff0201742985e
+      url: "https://github.com/ashtav/lazyui-lite.git"
+    source: git
     version: "0.0.1"
   leak_tracker:
     dependency: transitive

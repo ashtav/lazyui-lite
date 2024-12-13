@@ -303,8 +303,8 @@ class LzForm {
             value: controllers.toMap(),
             extra: extra);
       }
-    } catch (e, s) {
-      Utils.errorCatcher(e, s);
+    } catch (e) {
+      // error
     }
 
     return LzForm(

@@ -103,8 +103,7 @@ extension MapTextEditingControllerExtension
           key: errors.isEmpty ? '' : errors.first['key'],
           value: value,
           ok: errors.isEmpty);
-    } catch (e, s) {
-      Utils.errorCatcher(e, s);
+    } catch (e) {
       return TecValidation(error: 'Error validating form', key: '', ok: false);
     }
   }

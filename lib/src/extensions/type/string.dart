@@ -270,8 +270,7 @@ extension LzNullableStringExtension on String? {
       }
 
       return DateTime.now();
-    } catch (e, s) {
-      Utils.errorCatcher(e, s);
+    } catch (e) {
       return DateTime.now();
     }
   }

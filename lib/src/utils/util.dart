@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lazyui_lite/lazyui_lite.dart';
 import 'package:lazyui_lite/src/theme/colors.dart';
-import 'package:stack_trace/stack_trace.dart';
 
 import '../constants/value.dart';
 
