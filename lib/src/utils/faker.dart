@@ -37,12 +37,7 @@ class Faker {
     String price = randomInt.toString();
 
     final value = (price.length < length ? '${price}1' : price);
-
-    String result = NumberFormat.currency(
-      locale: locale,
-      decimalDigits: 0,
-      symbol: prefix,
-    ).format(int.parse(value));
+    String result = value;
 
     return result;
   }
@@ -85,9 +80,7 @@ class Faker {
 
   /// generate random date
   static String date({String format = 'yyyy-MM-dd'}) {
-    DateTime now = DateTime.now();
-    String formattedDate = DateFormat(format).format(now);
-    return formattedDate;
+    return '';
   }
 
   /// generate random gender

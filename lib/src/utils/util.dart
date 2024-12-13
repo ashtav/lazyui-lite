@@ -5,7 +5,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:lazyui_lite/lazyui_lite.dart';
 import 'package:lazyui_lite/src/theme/colors.dart';
 

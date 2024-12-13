@@ -155,9 +155,7 @@ class _ThousandFormatter extends TextInputFormatter {
           newValue.text.length - newValue.selection.extentOffset;
 
       String convert(String value) {
-        return NumberFormat.currency(
-                locale: 'id_ID', decimalDigits: 0, symbol: '')
-            .format(value.getNumeric);
+        return '';
       }
 
       String newString =
